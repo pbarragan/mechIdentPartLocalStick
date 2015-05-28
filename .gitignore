@@ -11,3 +11,8 @@ Thumbs.db
 # emacs temp files #
 ####################
 *~
+
+# g++ files #
+#############
+*.o
+*.dSYM
