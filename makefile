@@ -2,9 +2,9 @@ UNAME := $(shell uname)
 
 ifeq ($(UNAME), Linux)
 all:
-	g++ -g *.cpp -lrt -o testRealWorld
+	g++ *.cpp -lrt -o testRealWorld.o
 endif
 ifeq ($(UNAME), Darwin)
 all:
-	g++ -g *.cpp -o testRealWorld
+	g++ *.cpp -o testRealWorld.o
 endif
