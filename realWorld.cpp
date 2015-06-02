@@ -47,7 +47,7 @@ RealWorld::RealWorld(int modelNum,int numSteps,int writeOutFile,int actionSelect
 
   // Where the executable is
   //std::string exeDir = "/mit/barragan/Documents/cppCode/mechIdentPart";
-  std::string exeDir = "/home/barragan/data12112014new/";
+  std::string exeDir = "/home/barragan/dataPostGrad/";
   // get today's date and time
   // current date/time based on current system
   time_t now = time(0);
@@ -64,11 +64,11 @@ RealWorld::RealWorld(int modelNum,int numSteps,int writeOutFile,int actionSelect
 
   if(writeOutFile_){
     struct stat st = {0};
-    if (stat((exeDir+"/data/"+dString).c_str(), &st) == -1) {
-      mkdir((exeDir+"/data/"+dString).c_str(), 0777);
+    if (stat((exeDir+dString).c_str(), &st) == -1) {
+      mkdir((exeDir+dString).c_str(), 0777);
     }
     std::stringstream ss;
-    ss << exeDir+"/data/"+dString+"/data" << modelNum << dateString << ".txt";
+    ss << exeDir+dString+"/data" << modelNum << dateString << ".txt";
     std::string saveName = ss.str();
     std::cout << saveName << std::endl;
     outFile_.open(saveName.c_str());

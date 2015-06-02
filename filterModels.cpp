@@ -5,6 +5,7 @@
 #include "logUtils.h"
 #include "filterModels.h"
 
+#include <limits>
 #include <iostream> // DELETE
 
 double filterModels::logProbState(stateStruct sampleState, stateStruct meanState){

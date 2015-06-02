@@ -2,6 +2,7 @@
 #define SETUP_UTILS_H
 
 #include <vector>
+#include <string>
 #include "stateStruct.h"
 
 namespace setupUtils {
