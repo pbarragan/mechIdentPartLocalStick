@@ -6,7 +6,7 @@ import heapq
 import math
 import numpy as np
 
-import statsFiles05_28_2015
+import statsFiles04_14_2015
 import json
 import os
 
@@ -16,9 +16,9 @@ from matplotlib import pyplot
 
 exeDir = os.path.abspath(os.path.dirname(__file__))
 print exeDir
-dirName = '/home/barragan/dataPostGrad/2015_05_28/'
+dirName = '/home/barragan/data12112014new/data/2015_04_14/'
 
-outFile = exeDir+'/rmStatesAll05_28_2015.txt'
+outFile = exeDir+'/rmStatesAll04_14_2015.txt'
 
 numET = 1 # no parameter variations
 relevantMT = [0,1,2,3,4]
@@ -32,7 +32,7 @@ numT = 50 # number of trials per setting
 
 # goes experiment type (0-3), model type (0-3), trial number (0-9)
 if(True):
-    files = statsFiles05_28_2015.files
+    files = statsFiles04_14_2015.files
     fileNames = [[[] for y in range(numMT)] for x in range(numET)]
 
 

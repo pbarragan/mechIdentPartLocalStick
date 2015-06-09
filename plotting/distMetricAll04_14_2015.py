@@ -44,7 +44,7 @@ actionList = [actions[x] for x in indexList]
 
 # set up to read file
 exeDir = os.path.abspath(os.path.dirname(__file__))
-inFile = exeDir+'/rmStatesAll05_28_2015.txt'
+inFile = exeDir+'/rmStatesAll04_14_2015.txt'
 
 # set up needed variables
 relevantMT = [0,1,2,3,4]
@@ -67,7 +67,7 @@ print len(rStatesSave)
 print len(mStatesSave)
 
 
-includeMisclass = True
+includeMisclass = False
 typeString = ''
 if includeMisclass:
     typeString = 'wM'
@@ -75,7 +75,7 @@ else:
     typeString = 'woM'
 
 # set up to write file
-outFile = exeDir+'/perfValsAll05_28_2015'+typeString+'.txt'
+outFile = exeDir+'/perfValsAll04_14_2015'+typeString+'.txt'
 
 
 if includeMisclass:
