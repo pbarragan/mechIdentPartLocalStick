@@ -47,7 +47,9 @@ RealWorld::RealWorld(int modelNum,int numSteps,int writeOutFile,int actionSelect
 
   // Where the executable is
   //std::string exeDir = "/mit/barragan/Documents/cppCode/mechIdentPart";
-  std::string exeDir = "/home/barragan/dataPostGrad/";
+  //std::string exeDir = "/home/barragan/dataPostGrad/";
+  std::string exeDir = "./data/";
+
   // get today's date and time
   // current date/time based on current system
   time_t now = time(0);
@@ -692,16 +694,22 @@ void RealWorld::updateFilter(std::vector<double> action,std::vector<double> obs)
 	  *logUtils::safe_exp(normLogProbList[j]);
       }
       Neff = 1/Neff;
-      std::cout << "Filter #: " << i << std::endl;
-      std::cout << "Neff: " << Neff 
-		<< ", Neff needed: " << NEFF_FRACT*numParticles_ << std::endl;
+      bool printResample = false;
+      if(printResample){
+	std::cout << "Filter #: " << i << std::endl;
+	std::cout << "Neff: " << Neff 
+		  << ", Neff needed: " << NEFF_FRACT*numParticles_
+		  << std::endl;
+      }
       // Check if resampling is needed
       if (Neff/numParticles_ < NEFF_FRACT){
-	std::cout << "\033[1;31mRESAMPLING!\033[0m" << std::endl;
+	if(printResample) std::cout << "\033[1;31mRESAMPLING!\033[0m"
+				    << std::endl;
 	setupUtils::resampleParticles(filterBank_[i].stateList_,
-				      filterBank_[i].logProbList_);
+				      filterBank_[i].logProbList_,
+				      printResample);
       }
-      else std::cout << "No Resampling" << std::endl;
+      else if(printResample) std::cout << "No Resampling" << std::endl;
     }
   }
 
@@ -859,27 +867,36 @@ void RealWorld::runAction(){
 	// Special case for the latch
 	double sig = RTSD; // [cm] standard deviation of noise?????
 	double mu = 0.0; // mean of noise
+
+	std::vector<double> tempAction = action_;
+	
+	// add non-zero bias error to action
+	if(BIAS){
+	  for(size_t i=0;i<tempAction.size();i++){	    
+	    tempAction[i] = BIAS_SCALE*tempAction[i];
+	  }
+	}
+	
 	latch1::simulateWActionNoise(tempState.params,tempState.vars,
-				     action_,sig,mu);
+				     tempAction,sig,mu);
       }
       else{
 	tempState = translator::stateTransition(tempState,action_);
 
 	// add non-zero bias error
 	if(BIAS){
-	  double errorScale = 0.8;
 	  for(size_t i=0;i<tempState.vars.size();i++){
 	    // you might get wrapping error here so protect against it
 	    if(tempState.model==2){
 	      double diff = tempState.vars[i]-startState_.vars[i];
 	      if(diff>M_PI) diff -= 2*M_PI;
 	      else if(diff<-M_PI) diff += 2*M_PI;
-	      double th = errorScale*diff+startState_.vars[i];
+	      double th = BIAS_SCALE*diff+startState_.vars[i];
 	      tempState.vars[i] = th-floor((th+M_PI)/(2*M_PI))*2*M_PI;
 	    }
 	    else{
 	      tempState.vars[i] = 
-		errorScale*(tempState.vars[i]-startState_.vars[i])
+		BIAS_SCALE*(tempState.vars[i]-startState_.vars[i])
 		+startState_.vars[i];
 	    }
 	  }
@@ -1030,9 +1047,13 @@ void RealWorld::stepWorld(){
     std::cout << "\033[1;31mOUTSIDE WORKSPACE\033[0m" << std::endl;
   }
 
-  std::cout << "Time to choose:\n" << timing::timeDiff(ts5,ts6) << std::endl;
-  std::cout << "Time to run:\n" << timing::timeDiff(ts6,ts7) << std::endl;
-  std::cout << "Time to update filter:\n" << timing::timeDiff(ts7,ts8) << std::endl;
+  bool printTiming = false;
+  if(printTiming){
+    std::cout << "Time to choose:\n" << timing::timeDiff(ts5,ts6) << std::endl;
+    std::cout << "Time to run:\n" << timing::timeDiff(ts6,ts7) << std::endl;
+    std::cout << "Time to update filter:\n" << timing::timeDiff(ts7,ts8)
+	      << std::endl;
+  }
 
 
 }

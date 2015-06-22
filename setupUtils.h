@@ -17,7 +17,7 @@ namespace setupUtils {
   std::vector<std::vector<double> > fakeObs();
 
   // Particle filter
-  void resampleParticles(std::vector<stateStruct>& stateList,std::vector<double>& logProbList);
+  void resampleParticles(std::vector<stateStruct>& stateList,std::vector<double>& logProbList,bool& printResample);
   std::vector<double> standardGaussianVariates();
   double randomDouble();
   //Eigen::VectorXd sampleParticle(unsigned int size,Eigen::VectorXd& mu,Eigen::MatrixXd& A);

@@ -168,12 +168,14 @@ std::vector<std::vector<double> > setupUtils::fakeObs(){
 //using Eigen::MatrixXd;
 //using Eigen::VectorXd;
 
-void setupUtils::resampleParticles(std::vector<stateStruct>& stateList,std::vector<double>& logProbList){
+void setupUtils::resampleParticles(std::vector<stateStruct>& stateList,std::vector<double>& logProbList,bool& printResample){
   double logProbPerPart = logUtils::logSumExp(logProbList)
     -logUtils::safe_log(logProbList.size());
 
-  std::cout << "Number of particles: " << logProbList.size() << std::endl;
-  std::cout << "Log Prob Per Particle: " << logProbPerPart << std::endl;
+  if(printResample){
+    std::cout << "Number of particles: " << logProbList.size() << std::endl;
+    std::cout << "Log Prob Per Particle: " << logProbPerPart << std::endl;
+  }
 
   // Samples from the particles state according to the probability distribution 
   // Step 0: Normalize the log probability list

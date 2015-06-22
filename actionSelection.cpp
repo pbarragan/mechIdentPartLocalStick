@@ -611,6 +611,7 @@ void actionSelection::chooseActionSimpleRel(std::vector< std::vector<double> >& 
   else action = actionList[0];
   */
 
+  /*
   // free vs latch - to cover the space
   if (step == 0) action = actionList[7];
   else if (step == 1) action = actionList[2];
@@ -623,6 +624,82 @@ void actionSelection::chooseActionSimpleRel(std::vector< std::vector<double> >& 
   else if (step == 8) action = actionList[2];
   else if (step == 9) action = actionList[2];
   else action = actionList[0];
+  */
+
+  /*
+  // optimal free?
+  if (step == 0) action = actionList[7];
+  else if (step == 1) action = actionList[2];
+  else if (step == 2) action = actionList[3];
+  else if (step == 3) action = actionList[4];
+  else if (step == 4) action = actionList[6];
+  else if (step == 5) action = actionList[6];
+  else if (step == 6) action = actionList[0];
+  else if (step == 7) action = actionList[0];
+  else if (step == 8) action = actionList[2];
+  else if (step == 9) action = actionList[2];
+  else action = actionList[0];
+  */
+
+  /*
+  // optimal fixed?
+  if (step == 0) action = actionList[0];
+  else if (step == 1) action = actionList[4];
+  else if (step == 2) action = actionList[2];
+  else if (step == 3) action = actionList[6];
+  else if (step == 4) action = actionList[1];
+  else if (step == 5) action = actionList[5];
+  else if (step == 6) action = actionList[3];
+  else if (step == 7) action = actionList[7];
+  else if (step == 8) action = actionList[0];
+  else if (step == 9) action = actionList[4];
+  else action = actionList[0];
+  */
+
+  /*
+  // optimal rev?
+  if (step == 0) action = actionList[7];
+  else if (step == 1) action = actionList[3];
+  else if (step == 2) action = actionList[3];
+  else if (step == 3) action = actionList[7];
+  else if (step == 4) action = actionList[7];
+  else if (step == 5) action = actionList[6];
+  else if (step == 6) action = actionList[2];
+  else if (step == 7) action = actionList[3];
+  else if (step == 8) action = actionList[3];
+  else if (step == 9) action = actionList[7];
+  else action = actionList[0];
+  */
+
+  /*
+  // optimal pris?
+  if (step == 0) action = actionList[6];
+  else if (step == 1) action = actionList[0];
+  else if (step == 2) action = actionList[4];
+  else if (step == 3) action = actionList[2];
+  else if (step == 4) action = actionList[2];
+  else if (step == 5) action = actionList[0];
+  else if (step == 6) action = actionList[4];
+  else if (step == 7) action = actionList[6];
+  else if (step == 8) action = actionList[6];
+  else if (step == 9) action = actionList[2];
+  else action = actionList[0];
+  */
+
+  // optimal latch?
+  if (step == 0) action = actionList[4];
+  else if (step == 1) action = actionList[0];
+  else if (step == 2) action = actionList[2];
+  else if (step == 3) action = actionList[4];
+  else if (step == 4) action = actionList[4];
+  else if (step == 5) action = actionList[6];
+  else if (step == 6) action = actionList[6];
+  else if (step == 7) action = actionList[0];
+  else if (step == 8) action = actionList[6];
+  else if (step == 9) action = actionList[4];
+  else action = actionList[0];
+
+
 
 }
 
