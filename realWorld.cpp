@@ -45,10 +45,10 @@ RealWorld::RealWorld(int modelNum,int numSteps,int writeOutFile,int actionSelect
   useRobot_ = useRobot;
   fakeFileName_ = fakeFileName;
 
-  // Where the executable is
+  // Where the data should be saved is
   //std::string exeDir = "/mit/barragan/Documents/cppCode/mechIdentPart";
-  //std::string exeDir = "/home/barragan/dataPostGrad/";
-  std::string exeDir = "./data/";
+  std::string exeDir = "/home/barragan/dataPostGrad/";
+  //std::string exeDir = "./data/";
 
   // get today's date and time
   // current date/time based on current system
