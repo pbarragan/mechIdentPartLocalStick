@@ -1,4 +1,4 @@
-# this is for the 2015/06/22 experiments
+# this is for the 2015/06/23 experiments
 # no parameter variation. 50 trials for each model type
 # these are simulations
 # this is with added bias racing action selection

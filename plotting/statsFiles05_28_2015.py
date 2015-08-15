@@ -1,6 +1,7 @@
 # this is for the 2015/05/28 experiments
 # no parameter variation. 50 trials for each model type
 # these are simulations
+# no bias, racing
 
 files=['data0Thu_May_28_21_33_01_2015.txt',
        'data0Thu_May_28_21_33_20_2015.txt',

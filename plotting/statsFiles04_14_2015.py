@@ -1,5 +1,6 @@
 # this is for the 2015/04/14 experiments
 # no parameter variation. 50 trials for each model type.
+# no bias, random
 
 files=['data0Tue_Apr_14_10_55_59_2015.txt',
 'data0Tue_Apr_14_10_56_18_2015.txt',
