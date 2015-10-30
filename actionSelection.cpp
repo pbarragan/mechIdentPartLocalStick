@@ -545,10 +545,10 @@ void actionSelection::chooseActionRandom(std::vector< std::vector<double> >& act
 // Simplest action selection. Just go through the list. Doesn't really make sense
 void actionSelection::chooseActionSimpleRel(std::vector< std::vector<double> >& actionList,int step,std::vector<double>& action,std::vector<double>& poseInRbt,std::vector< std::vector<double> >& workspace){
 
-  //std::vector< std::vector<double> > validRelActionList;
-  //validateRelActionList(actionList,poseInRbt,workspace,validRelActionList);
+  std::vector< std::vector<double> > validRelActionList;
+  validateRelActionList(actionList,poseInRbt,workspace,validRelActionList);
 
-  //action = validRelActionList[step%validRelActionList.size()]; // select action
+  action = validRelActionList[step%validRelActionList.size()]; // select action
   
   // DELETE THIS
   //action = actionList[7];
@@ -686,6 +686,7 @@ void actionSelection::chooseActionSimpleRel(std::vector< std::vector<double> >& 
   else action = actionList[0];
   */
 
+  /*
   // optimal latch?
   if (step == 0) action = actionList[4];
   else if (step == 1) action = actionList[0];
@@ -698,7 +699,7 @@ void actionSelection::chooseActionSimpleRel(std::vector< std::vector<double> >& 
   else if (step == 8) action = actionList[6];
   else if (step == 9) action = actionList[4];
   else action = actionList[0];
-
+  */
 
 
 }

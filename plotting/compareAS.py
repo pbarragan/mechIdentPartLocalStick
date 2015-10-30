@@ -24,10 +24,21 @@ misClass2 = sSave['misClass']
 misClassMT2 = sSave['misClassMT']
 f2.close()
 
+# get info from OG AS file
+inFile3 = 'perfValsAll09_28_2015wM.txt'
+f3 = open(inFile3,'r')
+sSave = json.load(f3)
+errors3 = sSave['errors']
+misClass3 = sSave['misClass']
+misClassMT3 = sSave['misClassMT']
+f3.close()
+
 print 'Misclassifications Random'
 print misClass1
 print 'Misclassifications OG'
 print misClass2
+print 'Misclassifications Simple'
+print misClass3
 
 # calculate averages
 print "Average Error per Model Random:"
@@ -43,6 +54,13 @@ print means2
 print "Standard Deviation per Model OG:"
 stds2 = [np.std(np.vstack(es),0) for es in errors2]
 print stds2
+
+print "Average Error per Model Simple:"
+means3 = [np.mean(np.vstack(es),0) for es in errors3]
+print means3
+print "Standard Deviation per Model OG:"
+stds3 = [np.std(np.vstack(es),0) for es in errors3]
+print stds3
 
 # with 80% bias added
 
@@ -85,22 +103,23 @@ stds5 = [np.std(np.vstack(es),0) for es in errors5]
 print stds5
 
 # GET BEST
-inFile3 = 'perfValsBest06_18_2015wM.txt'
-f3 = open(inFile3,'r')
-sSave = json.load(f3)
-errors3 = sSave['errors']
-misClass3 = sSave['misClass']
-misClassMT3 = sSave['misClassMT']
-f3.close()
+inFile6 = 'perfValsBest06_18_2015wM.txt'
+f6 = open(inFile6,'r')
+sSave = json.load(f6)
+errors6 = sSave['errors']
+misClass6 = sSave['misClass']
+misClassMT6 = sSave['misClassMT']
+f6.close()
 
-print errors3
+print errors6
 
 # plot
 # steps of the experiments
 steps = np.arange(1,11)
 models = ["Free","Fixed","Rev","Pris","Latch"]
-for ms1,sds1,ms2,sds2,ms4,sds4,ms5,sds5,esBest,mName in \
-    zip(means1,stds1,means2,stds2,means4,stds4,means5,stds5,errors3,models):
+for ms1,sds1,ms2,sds2,ms3,sds3,ms4,sds4,ms5,sds5,esBest,mName in \
+    zip(means1,stds1,means2,stds2,means3,stds3,\
+        means4,stds4,means5,stds5,errors6,models):
 
     # no bias
     # plot random
@@ -111,6 +130,11 @@ for ms1,sds1,ms2,sds2,ms4,sds4,ms5,sds5,esBest,mName in \
     pyplot.errorbar(steps,ms2,yerr=sds2,fmt='-o',color='r')
     pyplot.plot(steps,ms2,color='r',marker='o',lw=2,markersize=8,\
                 markeredgecolor='r',label='Racing')
+    # plot simple
+    pyplot.errorbar(steps,ms3,yerr=sds3,fmt='-o',color='k')
+    pyplot.plot(steps,ms3,color='k',marker='o',lw=2,markersize=8,\
+                markeredgecolor='k',label='Simple')
+    
 
     # 80% bias level
     # plot random
@@ -131,8 +155,8 @@ for ms1,sds1,ms2,sds2,ms4,sds4,ms5,sds5,esBest,mName in \
     pyplot.xlabel('Steps')
     pyplot.ylabel('Error [m]')
 
-    outFile = '/mit/barragan/Public/LIS/postGradFigures/compareAS'+mName+'.pdf'
+    #outFile = '/mit/barragan/Public/LIS/postGradFigures/compareAS'+mName+'.pdf'
     #outFile = 'dataPlots/handChosen/compareAS'+mName+'.pdf'
-    pyplot.savefig(outFile,bbox_inches='tight')
+    #pyplot.savefig(outFile,bbox_inches='tight')
     pyplot.show()
     #pyplot.close()
