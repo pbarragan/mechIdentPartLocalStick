@@ -11,7 +11,7 @@ const double NEFF_FRACT = 0.5; //0.025;
 const int NUM_PARTICLES = 10000;
 const int NUM_REPEATS = 1;
 
-const bool BIAS = true; // Non-zero bias error
+const bool BIAS = false; // Non-zero bias error
 const double BIAS_SCALE = 0.8; // scale of the bias error
 
 const double FTSD = 0.10; // Filter Transition Standard Deviation

@@ -3,6 +3,7 @@
 # these are simulations
 # this is with simple action selection (round robin)
 # sometimes depending on action validity, the action sequence is not identical
+# 80% bias level
 
 files = ['data0Mon_Sep_28_20_36_43_2015.txt',
 'data0Mon_Sep_28_20_37_00_2015.txt',

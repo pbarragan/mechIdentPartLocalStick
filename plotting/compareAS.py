@@ -15,6 +15,15 @@ misClass1 = sSave['misClass']
 misClassMT1 = sSave['misClassMT']
 f1.close()
 
+# get info from RandomB AS file
+inFile1B = 'perfValsAll12_21_2015_randomwM.txt'
+f1B = open(inFile1B,'r')
+sSave = json.load(f1B)
+errors1B = sSave['errors']
+misClass1B = sSave['misClass']
+misClassMT1B = sSave['misClassMT']
+f1B.close()
+
 # get info from OG AS file
 inFile2 = 'perfValsAll05_28_2015wM.txt'
 f2 = open(inFile2,'r')
@@ -25,7 +34,7 @@ misClassMT2 = sSave['misClassMT']
 f2.close()
 
 # get info from OG AS file
-inFile3 = 'perfValsAll09_28_2015wM.txt'
+inFile3 = 'perfValsAll12_21_2015_simplewM.txt'
 f3 = open(inFile3,'r')
 sSave = json.load(f3)
 errors3 = sSave['errors']
@@ -47,6 +56,13 @@ print means1
 print "Standard Deviation per Model Random:"
 stds1 = [np.std(np.vstack(es),0) for es in errors1]
 print stds1
+
+print "Average Error per Model RandomB:"
+means1B = [np.mean(np.vstack(es),0) for es in errors1B]
+print means1B
+print "Standard Deviation per Model RandomB:"
+stds1B = [np.std(np.vstack(es),0) for es in errors1B]
+print stds1B
 
 print "Average Error per Model OG:"
 means2 = [np.mean(np.vstack(es),0) for es in errors2]
@@ -82,6 +98,15 @@ misClass5 = sSave['misClass']
 misClassMT5 = sSave['misClassMT']
 f5.close()
 
+# get info from simple AS file
+inFile7 = 'perfValsAll09_28_2015wM.txt'
+f7 = open(inFile7,'r')
+sSave = json.load(f7)
+errors7 = sSave['errors']
+misClass7 = sSave['misClass']
+misClassMT7 = sSave['misClassMT']
+f7.close()
+
 print 'Misclassifications Random'
 print misClass4
 print 'Misclassifications OG'
@@ -102,6 +127,13 @@ print "Standard Deviation per Model OG:"
 stds5 = [np.std(np.vstack(es),0) for es in errors5]
 print stds5
 
+print "Average Error per Model Simple:"
+means7 = [np.mean(np.vstack(es),0) for es in errors7]
+print means7
+print "Standard Deviation per Model Simple:"
+stds7 = [np.std(np.vstack(es),0) for es in errors7]
+print stds7
+
 # GET BEST
 inFile6 = 'perfValsBest06_18_2015wM.txt'
 f6 = open(inFile6,'r')
@@ -117,15 +149,19 @@ print errors6
 # steps of the experiments
 steps = np.arange(1,11)
 models = ["Free","Fixed","Rev","Pris","Latch"]
-for ms1,sds1,ms2,sds2,ms3,sds3,ms4,sds4,ms5,sds5,esBest,mName in \
-    zip(means1,stds1,means2,stds2,means3,stds3,\
-        means4,stds4,means5,stds5,errors6,models):
+for ms1,sds1,ms1B,sds1B,ms2,sds2,ms3,sds3,ms4,sds4,ms5,sds5,ms7,sds7,esBest,mName in \
+    zip(means1,stds1,means1B,stds1B,means2,stds2,means3,stds3,\
+        means4,stds4,means5,stds5,means7,stds7,errors6,models):
 
     # no bias
     # plot random
     pyplot.errorbar(steps,ms1,yerr=sds1,fmt='-o',color='b')
     pyplot.plot(steps,ms1,color='b',marker='o',lw=2,markersize=8,\
                 markeredgecolor='b',label='Random')
+    # plot random
+    pyplot.errorbar(steps,ms1B,yerr=sds1B,fmt='--o',color='b')
+    pyplot.plot(steps,ms1B,color='b',marker='o',lw=2,markersize=8,\
+                markeredgecolor='b',label='RandomB')
     # plot racing
     pyplot.errorbar(steps,ms2,yerr=sds2,fmt='-o',color='r')
     pyplot.plot(steps,ms2,color='r',marker='o',lw=2,markersize=8,\
@@ -146,6 +182,11 @@ for ms1,sds1,ms2,sds2,ms3,sds3,ms4,sds4,ms5,sds5,esBest,mName in \
     pyplot.plot(steps,ms5,color='y',marker='o',lw=2,markersize=8,\
                 markeredgecolor='y',label='Racing w/ Bias')
 
+    # plot simple
+    pyplot.errorbar(steps,ms7,yerr=sds7,fmt='-o',color='m')
+    pyplot.plot(steps,ms7,color='m',marker='o',lw=2,markersize=8,\
+                markeredgecolor='m',label='Simple w/ Bias')
+
     # plot best
     #pyplot.errorbar(steps,ms2,yerr=sds2,fmt='-o',color='g')
     pyplot.plot(steps,esBest[0],color='g',marker='o',lw=2,markersize=8,\
@@ -160,3 +201,10 @@ for ms1,sds1,ms2,sds2,ms3,sds3,ms4,sds4,ms5,sds5,esBest,mName in \
     #pyplot.savefig(outFile,bbox_inches='tight')
     pyplot.show()
     #pyplot.close()
+
+
+# old latch best
+#[[0.12010917110791212, 0.1459857869175755, 0.2140532579871118, 0.2166644391965765, 0.05540713029693328, 0.10987775169556734, 0.07085534126292667, 0.019242210533691684, 0.02724782002505467, 0.15543671332008385]]]
+
+# new latch best
+#[[0.2695814617736105, 0.10408954881434607, 0.10601747403123568, 0.11979776536033553, 0.041011480292654945, 0.09884274553810786, 0.11418362321694721, 0.0572749162071304, 0.12457289457161684, 0.09344081203818737]]]

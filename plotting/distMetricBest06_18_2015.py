@@ -112,7 +112,11 @@ if includeMisclass:
                     dists.append(distOs(oR,oM))
 
                 errors[rAll[-1][0]][-1].append(np.mean(dists))
-
+                print np.mean(dists)
+                
+            print r
+            print m
+            print errors[rAll[-1][0]][-1][-1]
 else:
     # iterate over states
     for i,(rAll,mAll) in enumerate(zip(rStatesSave,mStatesSave)):

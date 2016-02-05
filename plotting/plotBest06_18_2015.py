@@ -30,7 +30,11 @@ numMT = len(relevantMT)
 rStatesSave = []
 mStatesSave = []
 
-fList = ['data/2015_06_19/data0Fri_Jun_19_00_13_14_2015.txt','data/2015_06_21/data1Sun_Jun_21_17_20_14_2015.txt','data/2015_06_21/data2Sun_Jun_21_17_37_49_2015.txt','data/2015_06_21/data3Sun_Jun_21_21_04_04_2015.txt','data/2015_06_21/data4Sun_Jun_21_21_13_36_2015.txt']
+# original
+#fList = ['data/2015_06_19/data0Fri_Jun_19_00_13_14_2015.txt','data/2015_06_21/data1Sun_Jun_21_17_20_14_2015.txt','data/2015_06_21/data2Sun_Jun_21_17_37_49_2015.txt','data/2015_06_21/data3Sun_Jun_21_21_04_04_2015.txt','data/2015_06_21/data4Sun_Jun_21_21_13_36_2015.txt']
+
+# 12/19/2015
+fList = ['data/2015_06_19/data0Fri_Jun_19_00_13_14_2015.txt','data/2015_06_21/data1Sun_Jun_21_17_20_14_2015.txt','data/2015_06_21/data2Sun_Jun_21_17_37_49_2015.txt','data/2015_06_21/data3Sun_Jun_21_21_04_04_2015.txt','data/2015_12_19/data4Sat_Dec_19_16_15_49_2015.txt']
 
 for f in fList:
     print f
