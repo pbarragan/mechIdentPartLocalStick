@@ -1,5 +1,7 @@
 #include "translator.h"
 #include "logUtils.h"
+#include "globalVars.h"
+#include "auxUtils.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -22,16 +24,37 @@ stateStruct translator::stateTransition(stateStruct& state, std::vector<double>&
   */
   // Just for now to speed things up
   stateStruct nextState = state;
-
+  bool doSim = true; // should we do the simulation or not?
+  
   if (state.model == 0){
+    // State looks like:
+    // Model: 0
+    // Params:
+    // Vars: x,y in rbt space
+
+    // State looks like:
+    // Model: 1
+    // Params: x,y in rbt space
+    // Vars:
+    
     // Perfect relative motion from current location
     nextState.vars[0] += action[0];
     nextState.vars[1] += action[1];
   }
   else if (state.model == 1){
+    // State looks like:
+    // Model: 1
+    // Params: x,y in rbt space
+    // Vars: 
+    
     // Do nothing
   }
   else if (state.model == 2){
+    // State looks like:
+    // Model: 2
+    // Params: x_pivot,y_pivot in rbt space, r
+    // Vars: theta in rbt space
+    
     // Old Way
     // Calculate equilibrium point
 
@@ -44,40 +67,82 @@ stateStruct translator::stateTransition(stateStruct& state, std::vector<double>&
       }
     */
 
-    if(false){
-      double x = action[0]+state.params[2]*cos(state.vars[0]);
-      double y = action[1]+state.params[2]*sin(state.vars[0]);
-      nextState.vars[0] = atan2(y,x);
+    if(STICK){
+      double thTang = state.vars[0]+M_PI/2; // tangential to the circle
+      std::vector<double> b;
+      b.push_back(cos(thTang));
+      b.push_back(sin(thTang));
+      double th = STICK_HALF_ANGLE;
+      doSim = auxUtils::nearlyColinear(action,b,th);
     }
-    else{
-      // new way
-      double thi = state.vars[0];
-      int numSteps = 360;
-      double dth = 2*M_PI/numSteps;
-      std::vector<double> E(numSteps);
-      double r = state.params[2];
-      double ax = action[0];
-      double ay = action[1];
-      double KxP = 100;
-      double KyP = 400;
 
-      for(size_t i=0;i<numSteps;i++){
-	double th = -M_PI+(i+1)*dth;
-	E[i]=0.5*KxP*pow((r*((cos(thi)-cos(th))*ay-(sin(thi)-sin(th))*ax)),2)
-	  + 0.5*KyP*pow((r*((cos(thi)-cos(th))*ax+(sin(thi)-sin(th))*ay)
-			 +ax*ax+ay*ay),2);
+    if(doSim){
+      if(false){
+	double x = action[0]+state.params[2]*cos(state.vars[0]);
+	double y = action[1]+state.params[2]*sin(state.vars[0]);
+	nextState.vars[0] = atan2(y,x);
       }
-      nextState.vars[0] = -M_PI
-	+(std::distance(E.begin(),std::min_element(E.begin(),E.end()))+1)*dth;
+      else{
+	// new way
+	double thi = state.vars[0];
+	int numSteps = 360;
+	double dth = 2*M_PI/numSteps;
+	std::vector<double> E(numSteps);
+	double r = state.params[2];
+	double ax = action[0];
+	double ay = action[1];
+	double KxP = 100;
+	double KyP = 400;
+	
+	for(size_t i=0;i<numSteps;i++){
+	  double th = -M_PI+(i+1)*dth;
+	  E[i]=0.5*KxP*pow((r*((cos(thi)-cos(th))*ay-(sin(thi)-sin(th))*ax)),2)
+	    + 0.5*KyP*pow((r*((cos(thi)-cos(th))*ax+(sin(thi)-sin(th))*ay)
+			   +ax*ax+ay*ay),2);
+	}
+	nextState.vars[0] = -M_PI
+	  +(std::distance(E.begin(),std::min_element(E.begin(),E.end()))+1)*dth;
+      }
     }
   }
   else if (state.model == 3){
-    // Calculate equilibrium point
-    nextState.vars[0] += action[0]*cos(state.params[2])
-      +action[1]*sin(state.params[2]);
+    // State looks like:
+    // Model: 3
+    // Params: x_axis,y_axis,theta_axis in rbt space
+    // Vars: d
+
+    if(STICK){
+      double thTang = state.params[2]; // angle of joint
+      std::vector<double> b;
+      b.push_back(cos(thTang));
+      b.push_back(sin(thTang));
+      double th = STICK_HALF_ANGLE;
+      doSim = auxUtils::nearlyColinear(action,b,th);
+    }
+
+    if(doSim){
+      // Calculate equilibrium point
+      nextState.vars[0] += action[0]*cos(state.params[2])
+	+action[1]*sin(state.params[2]);
+    }
   }
   else if (state.model == 4){
-    latch1::simulate(nextState.params,nextState.vars,action);
+    // State looks like:
+    // Model: 4
+    // Params: x_pivot,y_pivot in rbt space, r, theta_L in rbt space, d_L
+    // Vars: theta in rbt space, d
+
+    if(STICK){
+      if(latch1::inLatch(nextState.params,nextState.vars)){
+	double thTang = state.params[3]; // angle of joint
+	std::vector<double> b;
+	b.push_back(cos(thTang));
+	b.push_back(sin(thTang));
+	double th = STICK_HALF_ANGLE;
+	doSim = auxUtils::nearlyColinear(action,b,th);
+      }
+    }
+    if(doSim) latch1::simulate(nextState.params,nextState.vars,action);
   }	
 
   return nextState;
@@ -257,4 +322,78 @@ bool translator::isStateValid(stateStruct& state,
     }
   } 
 }
+
+/*
+// g++ translator.cpp logUtils.cpp auxUtils.cpp latch1.cpp -o translatorTest.o
+int main(int argc, char* argv[]){
+  int model;
+  double th;
+  if (argc == 1){
+    model = 0; // default
+    th = 0.0; // default
+  }
+  else if (argc == 2){
+    model = atoi(argv[1]);
+    th = 0.0; // default
+  }
+  else{
+    model = atoi(argv[1]);
+    th = atof(argv[2]);
+  }
   
+  stateStruct prevState;
+  stateStruct nextState;
+  //int model = 0;
+  std::vector<double> action (2,0.0);
+  double amp = 0.12;
+  //double th = M_PI/4;
+  action[0] = amp*cos(th);
+  action[1] = amp*sin(th);
+  
+  if(model == 0){
+    prevState.model = 0;
+    prevState.vars.push_back(0.0); // x
+    prevState.vars.push_back(0.0); // y
+  }
+  else if(model == 1){
+    prevState.model = 1;
+    prevState.params.push_back(0.0); // x
+    prevState.params.push_back(0.0); // y
+  }
+  else if(model == 2){
+    prevState.model = 2;
+    prevState.params.push_back(-0.30); // x
+    prevState.params.push_back(0.0); // y
+    prevState.params.push_back(0.30); // r
+    prevState.vars.push_back(0.0); // th
+  }
+  else if(model == 3){
+    prevState.model = 3;
+    prevState.params.push_back(-0.40); // x
+    prevState.params.push_back(0.0); // y
+    prevState.params.push_back(0.0); // th
+    prevState.vars.push_back(0.40); // d
+  }
+  else if(model == 4){
+    prevState.model = 4;
+    prevState.params.push_back(0.27); // x
+    prevState.params.push_back(0.0); // y
+    prevState.params.push_back(0.17); // r
+    prevState.params.push_back(-3.14159); // th
+    prevState.params.push_back(0.1); // d
+    prevState.vars.push_back(-3.14159); // th 
+    prevState.vars.push_back(0.10); // d // start inside
+    //prevState.vars.push_back(0.0); // d // start outside
+  }
+  nextState = translator::stateTransition(prevState,action);
+
+  std::cout << "Prev state:" << std::endl;
+  auxUtils::printState(prevState);
+  std::cout << "Action:" << std::endl;
+  auxUtils::printAction(action);
+  std::cout << "Next state:" << std::endl;
+  auxUtils::printState(nextState);
+  
+  return 1;
+}
+*/

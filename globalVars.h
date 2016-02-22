@@ -19,4 +19,7 @@ const double FOSD = 0.01; // Filter Observation Standard Deviation
 const double RTSD = 0.025;//0.025; // Real Transition Standard Deviation
 const double ROSD = 0.01; // Real Observation Standard Deviation
 
+const bool STICK = true; // stick-slip
+const double STICK_HALF_ANGLE = 0.785; // half angle of stick-slip - pi/4
+
 #endif // GLOBAL_VARS_H
