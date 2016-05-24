@@ -134,6 +134,41 @@ print "Standard Deviation per Model Simple:"
 stds7 = [np.std(np.vstack(es),0) for es in errors7]
 print stds7
 
+# with stick
+# get info from random AS file
+inFile8 = 'perfValsAll2016_05_12_randomwM.txt'
+f8 = open(inFile8,'r')
+sSave = json.load(f8)
+errors8 = sSave['errors']
+misClass8 = sSave['misClass']
+misClassMT8 = sSave['misClassMT']
+f8.close()
+
+# get info from racing AS file
+inFile9 = 'perfValsAll2016_05_12_racingwM.txt'
+f9 = open(inFile9,'r')
+sSave = json.load(f9)
+errors9 = sSave['errors']
+misClass9 = sSave['misClass']
+misClassMT9 = sSave['misClassMT']
+f9.close()
+
+# calculate averages
+print "Average Error per Model Random:"
+means8 = [np.mean(np.vstack(es),0) for es in errors8]
+print means8
+print "Standard Deviation per Model Random:"
+stds8 = [np.std(np.vstack(es),0) for es in errors8]
+print stds8
+
+print "Average Error per Model Racing:"
+means9 = [np.mean(np.vstack(es),0) for es in errors9]
+print means9
+print "Standard Deviation per Model Random:"
+stds9 = [np.std(np.vstack(es),0) for es in errors9]
+print stds9
+
+
 # GET BEST
 inFile6 = 'perfValsBest06_18_2015wM.txt'
 f6 = open(inFile6,'r')
@@ -149,48 +184,69 @@ print errors6
 # steps of the experiments
 steps = np.arange(1,11)
 models = ["Free","Fixed","Rev","Pris","Latch"]
-for ms1,sds1,ms1B,sds1B,ms2,sds2,ms3,sds3,ms4,sds4,ms5,sds5,ms7,sds7,esBest,mName in \
+
+showNormal = False
+showBias = False
+showStick = True
+showBest = True
+
+for ms1,sds1,ms1B,sds1B,ms2,sds2,ms3,sds3,ms4,sds4,ms5,sds5,ms7,sds7,ms8,sds8,ms9,sds9,esBest,mName in \
     zip(means1,stds1,means1B,stds1B,means2,stds2,means3,stds3,\
-        means4,stds4,means5,stds5,means7,stds7,errors6,models):
+        means4,stds4,means5,stds5,means7,stds7,means8,stds8,means9,stds9,errors6,models):
 
-    # no bias
-    # plot random
-    pyplot.errorbar(steps,ms1,yerr=sds1,fmt='-o',color='b')
-    pyplot.plot(steps,ms1,color='b',marker='o',lw=2,markersize=8,\
-                markeredgecolor='b',label='Random')
-    # plot random
-    pyplot.errorbar(steps,ms1B,yerr=sds1B,fmt='--o',color='b')
-    pyplot.plot(steps,ms1B,color='b',marker='o',lw=2,markersize=8,\
-                markeredgecolor='b',label='RandomB')
-    # plot racing
-    pyplot.errorbar(steps,ms2,yerr=sds2,fmt='-o',color='r')
-    pyplot.plot(steps,ms2,color='r',marker='o',lw=2,markersize=8,\
-                markeredgecolor='r',label='Racing')
-    # plot simple
-    pyplot.errorbar(steps,ms3,yerr=sds3,fmt='-o',color='k')
-    pyplot.plot(steps,ms3,color='k',marker='o',lw=2,markersize=8,\
-                markeredgecolor='k',label='Simple')
+    if(showNormal):
+        # no bias
+        # plot random
+        pyplot.errorbar(steps,ms1,yerr=sds1,fmt='-o',color='b')
+        pyplot.plot(steps,ms1,color='b',marker='o',lw=2,markersize=8,\
+                    markeredgecolor='b',label='Random')
+        # plot random
+        pyplot.errorbar(steps,ms1B,yerr=sds1B,fmt='--o',color='b')
+        pyplot.plot(steps,ms1B,color='b',marker='o',lw=2,markersize=8,\
+                    markeredgecolor='b',label='RandomB')
+        # plot racing
+        pyplot.errorbar(steps,ms2,yerr=sds2,fmt='-o',color='r')
+        pyplot.plot(steps,ms2,color='r',marker='o',lw=2,markersize=8,\
+                    markeredgecolor='r',label='Racing')
+        # plot simple
+        pyplot.errorbar(steps,ms3,yerr=sds3,fmt='-o',color='k')
+        pyplot.plot(steps,ms3,color='k',marker='o',lw=2,markersize=8,\
+                    markeredgecolor='k',label='Simple')
     
-
-    # 80% bias level
-    # plot random
-    pyplot.errorbar(steps,ms4,yerr=sds4,fmt='-o',color='c')
-    pyplot.plot(steps,ms4,color='c',marker='o',lw=2,markersize=8,\
-                markeredgecolor='c',label='Random w/ Bias')
-    # plot racing
-    pyplot.errorbar(steps,ms5,yerr=sds5,fmt='-o',color='y')
-    pyplot.plot(steps,ms5,color='y',marker='o',lw=2,markersize=8,\
-                markeredgecolor='y',label='Racing w/ Bias')
-
-    # plot simple
-    pyplot.errorbar(steps,ms7,yerr=sds7,fmt='-o',color='m')
-    pyplot.plot(steps,ms7,color='m',marker='o',lw=2,markersize=8,\
-                markeredgecolor='m',label='Simple w/ Bias')
-
-    # plot best
-    #pyplot.errorbar(steps,ms2,yerr=sds2,fmt='-o',color='g')
-    pyplot.plot(steps,esBest[0],color='g',marker='o',lw=2,markersize=8,\
-                markeredgecolor='g',label='Best')
+    if(showBias):
+        # 80% bias level
+        # plot random
+        pyplot.errorbar(steps,ms4,yerr=sds4,fmt='-o',color='c')
+        pyplot.plot(steps,ms4,color='c',marker='o',lw=2,markersize=8,\
+                    markeredgecolor='c',label='Random w/ Bias')
+        # plot racing
+        pyplot.errorbar(steps,ms5,yerr=sds5,fmt='-o',color='y')
+        pyplot.plot(steps,ms5,color='y',marker='o',lw=2,markersize=8,\
+                    markeredgecolor='y',label='Racing w/ Bias')
+        
+        # plot simple
+        pyplot.errorbar(steps,ms7,yerr=sds7,fmt='-o',color='m')
+        pyplot.plot(steps,ms7,color='m',marker='o',lw=2,markersize=8,\
+                    markeredgecolor='m',label='Simple w/ Bias')
+        
+    if(showStick):
+        # stick
+        # plot random
+        pyplot.errorbar(steps,ms8,yerr=sds8,fmt='-o',color='g')
+        pyplot.plot(steps,ms8,color='g',marker='^',lw=2,markersize=8,\
+                    markeredgecolor='g',label='Random w/ Stick')
+        
+        # plot racing
+        pyplot.errorbar(steps,ms9,yerr=sds9,fmt='-o',color='b')
+        pyplot.plot(steps,ms9,color='b',marker='^',lw=2,markersize=8,\
+                    markeredgecolor='b',label='Racing w/ Stick')
+        
+        
+    if(showBest):
+        # plot best
+        #pyplot.errorbar(steps,ms2,yerr=sds2,fmt='-o',color='g')
+        pyplot.plot(steps,esBest[0],color='g',marker='o',lw=2,markersize=8,\
+                    markeredgecolor='g',label='Best')
     
     pyplot.legend()
     pyplot.xlabel('Steps')
